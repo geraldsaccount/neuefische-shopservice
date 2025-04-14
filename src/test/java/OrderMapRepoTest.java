@@ -1,77 +1,77 @@
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Test;
 
 class OrderMapRepoTest {
 
     @Test
     void getOrders() {
-        //GIVEN
+        // GIVEN
         OrderMapRepo repo = new OrderMapRepo();
 
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", List.of(product));
+        Order newOrder = new Order("1", List.of(product), OrderStatus.PROCESSING);
         repo.addOrder(newOrder);
 
-        //WHEN
+        // WHEN
         List<Order> actual = repo.getOrders();
 
-        //THEN
+        // THEN
         List<Order> expected = new ArrayList<>();
         Product product1 = new Product("1", "Apfel");
-        expected.add(new Order("1", List.of(product1)));
+        expected.add(new Order("1", List.of(product1), OrderStatus.PROCESSING));
 
         assertEquals(actual, expected);
     }
 
     @Test
     void getOrderById() {
-        //GIVEN
+        // GIVEN
         OrderMapRepo repo = new OrderMapRepo();
 
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", List.of(product));
+        Order newOrder = new Order("1", List.of(product), OrderStatus.PROCESSING);
         repo.addOrder(newOrder);
 
-        //WHEN
+        // WHEN
         Order actual = repo.getOrderById("1");
 
-        //THEN
+        // THEN
         Product product1 = new Product("1", "Apfel");
-        Order expected = new Order("1", List.of(product1));
+        Order expected = new Order("1", List.of(product1), OrderStatus.PROCESSING);
 
         assertEquals(actual, expected);
     }
 
     @Test
     void addOrder() {
-        //GIVEN
+        // GIVEN
         OrderMapRepo repo = new OrderMapRepo();
         Product product = new Product("1", "Apfel");
-        Order newOrder = new Order("1", List.of(product));
+        Order newOrder = new Order("1", List.of(product), OrderStatus.PROCESSING);
 
-        //WHEN
+        // WHEN
         Order actual = repo.addOrder(newOrder);
 
-        //THEN
+        // THEN
         Product product1 = new Product("1", "Apfel");
-        Order expected = new Order("1", List.of(product1));
+        Order expected = new Order("1", List.of(product1), OrderStatus.PROCESSING);
         assertEquals(actual, expected);
         assertEquals(repo.getOrderById("1"), expected);
     }
 
     @Test
     void removeOrder() {
-        //GIVEN
+        // GIVEN
         OrderMapRepo repo = new OrderMapRepo();
 
-        //WHEN
+        // WHEN
         repo.removeOrder("1");
 
-        //THEN
+        // THEN
         assertNull(repo.getOrderById("1"));
     }
 }
