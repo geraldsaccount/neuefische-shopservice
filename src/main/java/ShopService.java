@@ -31,6 +31,10 @@ public class ShopService {
         return orderRepo.addOrder(newOrder);
     }
 
+    public List<Order> getOrders() {
+        return orderRepo.getOrders();
+    }
+
     public List<Order> getOrdersWithStatus(OrderStatus status) {
         return orderRepo.getOrders().stream()
                 .filter(o -> o.status().equals(status))

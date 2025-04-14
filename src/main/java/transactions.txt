@@ -1,0 +1,4 @@
+addOrder A P1 P2 P3
+addOrder B P4 P1
+setStatus A COMPLETED
+printOrders
