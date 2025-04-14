@@ -28,10 +28,14 @@ public class ShopService {
         return orderRepo.getOrders().stream().filter(o -> o.status().equals(status)).toList();
     }
 
-    public Order updateOrder(String id, OrderStatus status) {
-        Order updatedOrder = orderRepo.getOrderById(id).withStatus(status);
+    public Order updateOrder(String orderId, OrderStatus status) throws OrderNotFoundException {
+        Order updatedOrder = orderRepo.getOrderById(orderId)
+                .orElseThrow(() -> {
+                    return new OrderNotFoundException("No order with an id of " + orderId + " was found.");
+                })
+                .withStatus(status);
 
-        orderRepo.removeOrder(id);
+        orderRepo.removeOrder(orderId);
         return orderRepo.addOrder(updatedOrder);
     }
 }
