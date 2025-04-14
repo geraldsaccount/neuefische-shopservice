@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import org.junit.jupiter.api.Test;
 
 class ProductRepoTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void getProducts() {
         // GIVEN
         ProductRepo repo = new ProductRepo();
@@ -20,20 +23,27 @@ class ProductRepoTest {
         assertEquals(actual, expected);
     }
 
-    @org.junit.jupiter.api.Test
-    void getProductById() {
+    @Test
+    void getProductById_returnsProduct_withValidId() {
         // GIVEN
         ProductRepo repo = new ProductRepo();
 
         // WHEN
-        Product actual = repo.getProductById("1");
+        Optional<Product> actual = repo.getProductById("1");
 
         // THEN
         Product expected = new Product("1", "Apfel");
-        assertEquals(actual, expected);
+        assertThat(actual).isNotEmpty().contains(expected);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    void getProductById_returnsEmpty_withInvalidId() {
+        ProductRepo repo = new ProductRepo();
+        Optional<Product> actual = repo.getProductById("2");
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
     void addProduct() {
         // GIVEN
         ProductRepo repo = new ProductRepo();
@@ -48,7 +58,7 @@ class ProductRepoTest {
         assertEquals(repo.getProductById("2"), expected);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void removeProduct() {
         // GIVEN
         ProductRepo repo = new ProductRepo();
