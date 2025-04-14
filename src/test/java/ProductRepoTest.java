@@ -18,7 +18,7 @@ class ProductRepoTest {
 
         // THEN
         List<Product> expected = new ArrayList<>();
-        expected.add(new Product("1", "Apfel"));
+        expected.add(new Product("P1", "Apple"));
         assertEquals(actual, expected);
     }
 
@@ -28,17 +28,17 @@ class ProductRepoTest {
         ProductRepo repo = new ProductRepo();
 
         // WHEN
-        Optional<Product> actual = repo.getProductById("1");
+        Optional<Product> actual = repo.getProductById("P1");
 
         // THEN
-        Product expected = new Product("1", "Apfel");
+        Product expected = new Product("P1", "Apple");
         assertThat(actual).isNotEmpty().contains(expected);
     }
 
     @Test
     void getProductById_returnsEmpty_withInvalidId() {
         ProductRepo repo = new ProductRepo();
-        Optional<Product> actual = repo.getProductById("2");
+        Optional<Product> actual = repo.getProductById("P2");
         assertThat(actual).isEmpty();
     }
 
@@ -46,15 +46,15 @@ class ProductRepoTest {
     void addProduct() {
         // GIVEN
         ProductRepo repo = new ProductRepo();
-        Product newProduct = new Product("2", "Banane");
+        Product newProduct = new Product("P2", "Banana");
 
         // WHEN
         Product actual = repo.addProduct(newProduct);
 
         // THEN
-        Product expected = new Product("2", "Banane");
+        Product expected = new Product("P2", "Banana");
         assertEquals(actual, expected);
-        assertEquals(repo.getProductById("2").get(), expected);
+        assertEquals(repo.getProductById("P2").get(), expected);
     }
 
     @Test
@@ -63,9 +63,9 @@ class ProductRepoTest {
         ProductRepo repo = new ProductRepo();
 
         // WHEN
-        repo.removeProduct("1");
+        repo.removeProduct("P1");
 
         // THEN
-        assertThat(repo.getProductById("1")).isEmpty();
+        assertThat(repo.getProductById("P1")).isEmpty();
     }
 }
