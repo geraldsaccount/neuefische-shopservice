@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 class ProductRepoTest {
@@ -55,7 +54,7 @@ class ProductRepoTest {
         // THEN
         Product expected = new Product("2", "Banane");
         assertEquals(actual, expected);
-        assertEquals(repo.getProductById("2"), expected);
+        assertEquals(repo.getProductById("2").get(), expected);
     }
 
     @Test
@@ -67,6 +66,6 @@ class ProductRepoTest {
         repo.removeProduct("1");
 
         // THEN
-        assertNull(repo.getProductById("1"));
+        assertThat(repo.getProductById("1")).isEmpty();
     }
 }
