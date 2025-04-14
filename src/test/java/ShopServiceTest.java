@@ -57,6 +57,7 @@ class ShopServiceTest {
 
     @Test
     void getOrderWithStatus_returnsEmptyList_whenNoOrdersPresent() {
+        service = new ShopService();
         assertThat(service.getOrdersWithStatus(OrderStatus.PROCESSING)).isEmpty();
 
     }
