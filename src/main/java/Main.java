@@ -8,9 +8,9 @@ public class Main {
         IdService idService = new IdService();
         ShopService shopService = new ShopService(productRepo, orderRepo, idService);
 
-        productRepo.addProduct(new Product("P2", "Laptop"));
-        productRepo.addProduct(new Product("P3", "Keyboard"));
-        productRepo.addProduct(new Product("P4", "Mouse"));
+        productRepo.addProduct(new Product("P2", "Peach"));
+        productRepo.addProduct(new Product("P3", "Avocado"));
+        productRepo.addProduct(new Product("P4", "Honeydew"));
 
         try {
             shopService.addOrder(List.of("P1", "P2", "P3"));
@@ -19,5 +19,7 @@ public class Main {
         } catch (ProductNotFoundException e) {
             System.out.println(e.getMessage());
         }
+        OrderCommandHandler commandHandler = new OrderCommandHandler(shopService);
+        commandHandler.execute("file path here");
     }
 }
