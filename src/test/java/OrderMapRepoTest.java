@@ -1,8 +1,9 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
 
 class OrderMapRepoTest {
@@ -37,13 +38,13 @@ class OrderMapRepoTest {
         repo.addOrder(newOrder);
 
         // WHEN
-        Order actual = repo.getOrderById("1");
+        Optional<Order> actual = repo.getOrderById("1");
 
         // THEN
         Product product1 = new Product("1", "Apfel");
         Order expected = new Order("1", List.of(product1), OrderStatus.PROCESSING);
 
-        assertEquals(actual, expected);
+        assertEquals(actual.get(), expected);
     }
 
     @Test
@@ -60,7 +61,7 @@ class OrderMapRepoTest {
         Product product1 = new Product("1", "Apfel");
         Order expected = new Order("1", List.of(product1), OrderStatus.PROCESSING);
         assertEquals(actual, expected);
-        assertEquals(repo.getOrderById("1"), expected);
+        assertEquals(repo.getOrderById("1").get(), expected);
     }
 
     @Test
@@ -72,6 +73,6 @@ class OrderMapRepoTest {
         repo.removeOrder("1");
 
         // THEN
-        assertNull(repo.getOrderById("1"));
+        assertThat(repo.getOrderById("1")).isEmpty();
     }
 }

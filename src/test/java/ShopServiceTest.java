@@ -57,8 +57,25 @@ class ShopServiceTest {
 
     @Test
     void getOrderWithStatus_returnsEmptyList_whenNoOrdersPresent() {
-        ShopService shopService = new ShopService();
-        assertThat(shopService.getOrdersWithStatus(OrderStatus.PROCESSING)).isEmpty();
+        service = new ShopService();
+        assertThat(service.getOrdersWithStatus(OrderStatus.PROCESSING)).isEmpty();
 
+    }
+
+    @Test
+    void updateOrder_returnsUpdatedOrder_whenValidId() throws OrderNotFoundException {
+        Order updatedOrder = service.updateOrder(order.id(), OrderStatus.COMPLETED);
+
+        assertThat(updatedOrder.status()).isEqualTo(OrderStatus.COMPLETED);
+    }
+
+    @Test
+    void updatedOrder_doesSomethingLetsSee_whenInvalidID() {
+        String invalidId = "invalid id";
+        assertThatThrownBy(() -> {
+            service.updateOrder(invalidId, OrderStatus.COMPLETED);
+        })
+                .isInstanceOf(OrderNotFoundException.class)
+                .hasMessage("No order with an id of " + invalidId + " was found.");
     }
 }

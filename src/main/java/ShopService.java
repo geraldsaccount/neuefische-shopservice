@@ -27,4 +27,15 @@ public class ShopService {
     public List<Order> getOrdersWithStatus(OrderStatus status) {
         return orderRepo.getOrders().stream().filter(o -> o.status().equals(status)).toList();
     }
+
+    public Order updateOrder(String orderId, OrderStatus status) throws OrderNotFoundException {
+        Order updatedOrder = orderRepo.getOrderById(orderId)
+                .orElseThrow(() -> {
+                    return new OrderNotFoundException("No order with an id of " + orderId + " was found.");
+                })
+                .withStatus(status);
+
+        orderRepo.removeOrder(orderId);
+        return orderRepo.addOrder(updatedOrder);
+    }
 }
