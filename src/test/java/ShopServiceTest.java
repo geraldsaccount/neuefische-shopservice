@@ -17,7 +17,7 @@ class ShopServiceTest {
     @BeforeEach
     @SuppressWarnings("unused")
     void setUp() throws ProductNotFoundException {
-        service = new ShopService(new ProductRepo(), new OrderListRepo());
+        service = new ShopService(new ProductRepo(), new OrderListRepo(), new IdService());
         ids = new ArrayList<>();
         ids.add("P1");
         order = service.addOrder(ids);
@@ -57,7 +57,7 @@ class ShopServiceTest {
 
     @Test
     void getOrderWithStatus_returnsEmptyList_whenNoOrdersPresent() {
-        service = new ShopService(new ProductRepo(), new OrderListRepo());
+        service = new ShopService(new ProductRepo(), new OrderListRepo(), new IdService());
         assertThat(service.getOrdersWithStatus(OrderStatus.PROCESSING)).isEmpty();
 
     }
