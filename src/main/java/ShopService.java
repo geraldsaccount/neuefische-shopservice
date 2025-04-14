@@ -1,7 +1,10 @@
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +32,21 @@ public class ShopService {
     }
 
     public List<Order> getOrdersWithStatus(OrderStatus status) {
-        return orderRepo.getOrders().stream().filter(o -> o.status().equals(status)).toList();
+        return orderRepo.getOrders().stream()
+                .filter(o -> o.status().equals(status))
+                .toList();
+    }
+
+    public Map<OrderStatus, Order> getOldestPerStatus() {
+        return orderRepo.getOrders().stream()
+                .collect(Collectors.groupingBy(
+                        Order::status,
+                        Collectors.minBy(Comparator.comparing(Order::timestamp))))
+                .entrySet().stream()
+                .filter(e -> e.getValue().isPresent())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> e.getValue().orElseThrow()));
     }
 
     public Order updateOrder(String orderId, OrderStatus status) throws OrderNotFoundException {

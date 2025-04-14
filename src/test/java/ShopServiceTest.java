@@ -1,6 +1,8 @@
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -13,11 +15,13 @@ class ShopServiceTest {
     ShopService service;
     List<String> ids;
     Order order;
+    OrderRepo orderRepo;
 
     @BeforeEach
     @SuppressWarnings("unused")
     void setUp() throws ProductNotFoundException {
-        service = new ShopService(new ProductRepo(), new OrderListRepo(), new IdService());
+        orderRepo = new OrderListRepo();
+        service = new ShopService(new ProductRepo(), orderRepo, new IdService());
         ids = new ArrayList<>();
         ids.add("P1");
         order = service.addOrder(ids);
@@ -63,6 +67,27 @@ class ShopServiceTest {
     }
 
     @Test
+    void getOldestPerStatus_returnsCorrectOrders_whenOrdersMade() {
+        Order oldProcessingOrder = order.withTimestamp(order.timestamp().minus(Duration.ofMinutes(10)));
+        Order oldCompletedOrder = order.withStatus(OrderStatus.COMPLETED);
+
+        // Circumvent ShopService due to it overriding the timestamp
+        orderRepo.addOrder(oldProcessingOrder);
+        orderRepo.addOrder(oldCompletedOrder);
+
+        assertThat(service.getOldestPerStatus())
+                .containsExactlyEntriesOf(Map.of(
+                        OrderStatus.PROCESSING, oldProcessingOrder,
+                        OrderStatus.COMPLETED, oldCompletedOrder));
+    }
+
+    @Test
+    void getOldestPerStatus_returnsEmpty_whenNoOrders() {
+        service = new ShopService(new ProductRepo(), new OrderListRepo(), new IdService());
+        assertThat(service.getOldestPerStatus()).isEmpty();
+    }
+
+    @Test
     void updateOrder_returnsUpdatedOrder_whenValidId() throws OrderNotFoundException {
         Order updatedOrder = service.updateOrder(order.id(), OrderStatus.COMPLETED);
 
@@ -78,4 +103,5 @@ class ShopServiceTest {
                 .isInstanceOf(OrderNotFoundException.class)
                 .hasMessage("No order with an id of " + invalidId + " was found.");
     }
+
 }

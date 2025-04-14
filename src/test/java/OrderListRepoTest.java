@@ -11,6 +11,7 @@ class OrderListRepoTest {
     Order order;
 
     @BeforeEach
+    @SuppressWarnings("unused")
     void setUp() {
         repo = new OrderListRepo();
         product = new Product("P1", "Apple");
