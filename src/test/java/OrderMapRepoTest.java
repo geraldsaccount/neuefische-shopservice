@@ -11,6 +11,7 @@ class OrderMapRepoTest {
     Order order;
 
     @BeforeEach
+    @SuppressWarnings("unused")
     void setUp() {
         repo = new OrderMapRepo();
         product = new Product("P1", "Apple");
