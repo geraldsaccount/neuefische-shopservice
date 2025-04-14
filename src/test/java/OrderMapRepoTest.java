@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -37,7 +38,7 @@ class OrderMapRepoTest {
         repo.addOrder(newOrder);
 
         // WHEN
-        Order actual = repo.getOrderById("1");
+        Optional<Order> actual = repo.getOrderById("1");
 
         // THEN
         Product product1 = new Product("1", "Apfel");
