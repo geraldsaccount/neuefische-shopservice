@@ -19,14 +19,14 @@ class ShopServiceTest {
     void setUp() throws ProductNotFoundException {
         service = new ShopService(new ProductRepo(), new OrderListRepo());
         ids = new ArrayList<>();
-        ids.add("1");
+        ids.add("P1");
         order = service.addOrder(ids);
     }
 
     @Test
     void addOrder_returnsAddedOrder_givenValidIds() throws ProductNotFoundException {
         Order actual = service.addOrder(ids);
-        Order expected = new Order("-1", List.of(new Product("1", "Apfel")), OrderStatus.PROCESSING, Instant.now());
+        Order expected = new Order("-1", List.of(new Product("P1", "Apple")), OrderStatus.PROCESSING, Instant.now());
         assertEquals(expected.products(), actual.products());
         assertNotNull(expected.id());
     }
