@@ -10,7 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class ShopServiceTest {
-
     ShopService service;
     List<String> ids;
     Order order;
@@ -18,7 +17,7 @@ class ShopServiceTest {
     @BeforeEach
     @SuppressWarnings("unused")
     void setUp() throws ProductNotFoundException {
-        service = new ShopService();
+        service = new ShopService(new ProductRepo(), new OrderListRepo());
         ids = new ArrayList<>();
         ids.add("1");
         order = service.addOrder(ids);
@@ -58,7 +57,7 @@ class ShopServiceTest {
 
     @Test
     void getOrderWithStatus_returnsEmptyList_whenNoOrdersPresent() {
-        service = new ShopService();
+        service = new ShopService(new ProductRepo(), new OrderListRepo());
         assertThat(service.getOrdersWithStatus(OrderStatus.PROCESSING)).isEmpty();
 
     }
