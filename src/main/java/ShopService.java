@@ -25,4 +25,11 @@ public class ShopService {
     public List<Order> getOrdersWithStatus(OrderStatus status) {
         return orderRepo.getOrders().stream().filter(o -> o.status().equals(status)).toList();
     }
+
+    public Order updateOrder(String id, OrderStatus status) {
+        Order updatedOrder = orderRepo.getOrderById(id).withStatus(status);
+
+        orderRepo.removeOrder(id);
+        return orderRepo.addOrder(updatedOrder);
+    }
 }
