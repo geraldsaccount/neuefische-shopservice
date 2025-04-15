@@ -1,11 +1,14 @@
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
         ProductRepo productRepo = new ProductRepo();
         OrderRepo orderRepo = new OrderListRepo();
-        IdService idService = new IdService();
+        IdService idService = new UUIDService();
         ShopService shopService = new ShopService(productRepo, orderRepo, idService);
 
         productRepo.addProduct(new Product("P2", "Peach"));
@@ -19,7 +22,12 @@ public class Main {
         } catch (ProductNotFoundException e) {
             System.out.println(e.getMessage());
         }
-        OrderCommandHandler commandHandler = new OrderCommandHandler(shopService);
-        commandHandler.execute("file path here");
+
+        TransactionHandler transactionHandler = new TransactionHandler(shopService);
+        try {
+            transactionHandler.execute(Files.readAllLines(Path.of("src\\main\\java\\transactions.txt")));
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 }
