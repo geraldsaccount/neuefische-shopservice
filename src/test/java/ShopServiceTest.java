@@ -21,7 +21,7 @@ class ShopServiceTest {
     @SuppressWarnings("unused")
     void setUp() throws ProductNotFoundException {
         orderRepo = new OrderListRepo();
-        service = new ShopService(new ProductRepo(), orderRepo, new IdService());
+        service = new ShopService(new ProductRepo(), orderRepo, new UUIDService());
         ids = new ArrayList<>();
         ids.add("P1");
         order = service.addOrder(ids);
@@ -61,7 +61,7 @@ class ShopServiceTest {
 
     @Test
     void getOrderWithStatus_returnsEmptyList_whenNoOrdersPresent() {
-        service = new ShopService(new ProductRepo(), new OrderListRepo(), new IdService());
+        service = new ShopService(new ProductRepo(), new OrderListRepo(), new UUIDService());
         assertThat(service.getOrdersWithStatus(OrderStatus.PROCESSING)).isEmpty();
 
     }
@@ -83,7 +83,7 @@ class ShopServiceTest {
 
     @Test
     void getOldestPerStatus_returnsEmpty_whenNoOrders() {
-        service = new ShopService(new ProductRepo(), new OrderListRepo(), new IdService());
+        service = new ShopService(new ProductRepo(), new OrderListRepo(), new UUIDService());
         assertThat(service.getOldestPerStatus()).isEmpty();
     }
 
