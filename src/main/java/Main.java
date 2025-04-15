@@ -1,4 +1,7 @@
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 public class Main {
@@ -19,7 +22,12 @@ public class Main {
         } catch (ProductNotFoundException e) {
             System.out.println(e.getMessage());
         }
-        OrderCommandHandler commandHandler = new OrderCommandHandler(shopService);
-        commandHandler.execute("file path here");
+
+        TransactionHandler transactionHandler = new TransactionHandler(shopService);
+        try {
+            transactionHandler.execute(Files.readAllLines(Path.of("src\\main\\java\\transactions.txt")));
+        } catch (IOException e) {
+            System.out.println(e);
+        }
     }
 }
